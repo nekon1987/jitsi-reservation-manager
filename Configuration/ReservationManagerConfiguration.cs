@@ -21,11 +21,11 @@ namespace JitsiReservationManager.Configuration
         }
 
         /// <summary>
-        /// If no duration value is provided in reservation creation request - we will use this value which will be passed to Jitsi if requested
+        /// This format is specified as per Jitsi manual
         /// </summary>
         public static string JitsiDateTimeFormat
         {
-            get { return "yyyy-MM-dd'T'HH:mm:ss"; }
+            get { return "yyyy-MM-dd'T'HH:mm:ss.fffZ"; }
         }
     }
 }

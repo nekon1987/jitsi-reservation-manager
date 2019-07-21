@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JitsiReservationManager.MessageModels.Responses
+﻿namespace JitsiReservationManager.MessageModels.Responses
 {
     public class CheckIfReservationExistsAndIsValidResponse
     {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JitsiReservationManager.MessageModels.Requests
 {
@@ -19,7 +16,6 @@ namespace JitsiReservationManager.MessageModels.Requests
         /// Time after which we will not allow conference to be started
         /// </summary>
         public DateTime? ReservationExpirationDateTime { get; set; }
-
 
         /// <summary>
         /// Estimated duration of the conference

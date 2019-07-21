@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using log4net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +13,8 @@ namespace JitsiReservationManager
 {
     public class Startup
     {
+        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -46,11 +47,18 @@ namespace JitsiReservationManager
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+                       
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
             loggerFactory.AddLog4Net();
+
+            app.Use(async (context, next) =>
+            {
+                _logger.Debug($"{context.Request.Path} -> {context.Request.Method} [{context.Request.QueryString.ToString()}]");
+                await next.Invoke();
+            });
 
             app.UseMvc(routes =>
             {

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 using JitsiReservationManager.Factories;
 using JitsiReservationManager.MessageModels.Requests;
 using JitsiReservationManager.Repository;
 using JitsiReservationManager.Validation;
 using log4net;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JitsiReservationManager.Controllers

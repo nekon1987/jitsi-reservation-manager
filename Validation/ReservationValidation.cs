@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using JitsiReservationManager.MessageModels.Requests;
 
 namespace JitsiReservationManager.Validation

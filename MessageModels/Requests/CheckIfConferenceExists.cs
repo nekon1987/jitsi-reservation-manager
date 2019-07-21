@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JitsiReservationManager.Requests
+﻿namespace JitsiReservationManager.Requests
 {
     /// <summary>
-    /// Bellow parameter names is as per Jifco interface requirements 
+    /// Bellow parameter names are as per Jifco interface requirements 
     /// Jifco will call our endpoint with these parameters so that we can allow or dissallow conference creation
     /// </summary>
     public class CheckIfConferenceExists

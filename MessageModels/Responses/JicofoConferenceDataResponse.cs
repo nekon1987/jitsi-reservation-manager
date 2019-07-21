@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JitsiReservationManager.MessageModels.Responses
+﻿namespace JitsiReservationManager.MessageModels.Responses
 {
+    /// <summary>
+    /// This data object is in strict format described by Jicofo manual here: https://github.com/jitsi/jicofo/blob/master/doc/reservation.md
+    /// </summary>
     public class JicofoConferenceDataResponse
     {
-        public string id { get; set; }
+        public long id { get; set; }
         public string name { get; set; }
         public string mail_owner { get; set; }
         public string start_time { get; set; }
-        public string duration { get; set; }
+        public long duration { get; set; }
     }
 }

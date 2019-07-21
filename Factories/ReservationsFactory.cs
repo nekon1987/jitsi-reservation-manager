@@ -6,6 +6,14 @@ namespace JitsiReservationManager.Factories
 {
     public class ReservationsFactory
     {
+        /// <summary>
+        /// Create new instance of reservation for a room which can be used by Jitsi users
+        /// </summary>
+        /// <param name="roomName">Human friendly room name</param>
+        /// <param name="roomOwnerIdentifier">Some unique dentifier like email address</param>
+        /// <param name="reservationValidFromDatetime">If value will not be provided - defaults from ReservationManagerConfiguration will be used</param>
+        /// <param name="reservationExpirationDateTime">If value will not be provided - defaults from ReservationManagerConfiguration will be used</param>
+        /// <param name="conferenceDurationInSeconds">If value will not be provided - defaults from ReservationManagerConfiguration will be used</param>
         public Reservation Create(string roomName, string roomOwnerIdentifier, DateTime? reservationValidFromDatetime,
             DateTime? reservationExpirationDateTime, double? conferenceDurationInSeconds)
         {
@@ -20,7 +28,6 @@ namespace JitsiReservationManager.Factories
 
             return new Reservation()
             {
-                Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.Now,
                 ReservationValidFromDatetime = reservationValidFromDatetime.Value,
                 ReservationExpirationDateTime = reservationExpirationDateTime.Value,

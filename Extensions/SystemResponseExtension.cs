@@ -1,12 +1,13 @@
 ﻿using JitsiReservationManager.MessageModels;
 using log4net;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JitsiReservationManager.Extensions
 {
+    /// <summary>
+    /// This helper allows us to fluently log errors and return SystemResponse to upper layer, 
+    /// both SystemResponse and LogEntry will share error message which saves some typing if nothing else
+    /// </summary>
     public static class SystemResponseExtension
     {
         public static SystemResponse LogError(this SystemResponse failedResponse, ILog logger)

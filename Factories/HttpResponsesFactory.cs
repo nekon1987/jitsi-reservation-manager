@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace JitsiReservationManager.Factories
 {
+    /// <summary>
+    /// Saving some typing in controllers by providing some common types of responses
+    /// </summary>
     public class HttpResponsesFactory
     {
         public JsonResult CreateSuccessResponseWithData<TDataType>(TDataType data)

@@ -27,6 +27,10 @@ namespace JitsiReservationManager.MessageModels
         }
     }
 
+
+    /// <summary>
+    /// Response allowing us to carry success flag with optional content between application layers repositories/cotrollers
+    /// </summary>
     public class SystemResponse<TType> : SystemResponse
     {
         public TType Content { get; set; }

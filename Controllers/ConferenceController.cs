@@ -2,11 +2,8 @@
 using JitsiReservationManager.Factories;
 using JitsiReservationManager.Repository;
 using JitsiReservationManager.Requests;
-using JitsiReservationManager.Validation;
 using log4net;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace JitsiReservationManager.Controllers
@@ -18,7 +15,6 @@ namespace JitsiReservationManager.Controllers
         private static readonly HttpResponsesFactory _httpResponsesFactory = new HttpResponsesFactory();
         private static readonly ReservationRepository _reservationRepository = new ReservationRepository();
         private static readonly JicofoResponseDataFactory _jicofoResponseDataFactory = new JicofoResponseDataFactory();
-        private static readonly ConferenceValidation _conferenceValidation = new ConferenceValidation();
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
@@ -28,7 +24,7 @@ namespace JitsiReservationManager.Controllers
         /// </summary>
         /// <param name="request">request containing among others, roomName for which Jitsi is trying to create a conference,
         /// request is fully populated by Jifoco module of Jitsi platform</param>
-        /// <returns>200 if reservation exists and 403 if reservation was not found</returns>
+        /// <returns>200 if reservation exists and 403 if reservation was not found and 409 if conflict is detected (conflicts are checked by room name)</returns>
         // POST: api/Conference
         [HttpPost]
         public JsonResult Post([FromForm]CheckIfConferenceExists request)
@@ -47,15 +43,12 @@ namespace JitsiReservationManager.Controllers
                     var successResponseData = _jicofoResponseDataFactory.CreateConferenceDataForResponse(existingReservationWithTheSameName);
                     return _httpResponsesFactory.CreateConflictResponseWithData(successResponseData);
                 }
-                else if(checkIfReservationExistsAndIsValidsResult.Content.ReservationExistsAndIsValidForCurrentTimePeriod)
+                else if (checkIfReservationExistsAndIsValidsResult.Content.ReservationExistsAndIsValidForCurrentTimePeriod)
                 {
                     _logger.Info($"Reservation query found a valid reservation");
                     var successResponseData = _jicofoResponseDataFactory.CreateConferenceDataForResponse(existingReservationWithTheSameName);
-                    return _httpResponsesFactory.CreateSuccessResponse();
-
-                    // why this fails????? manual states we have to return this data
-                    // return _httpResponsesFactory.CreateSuccessResponseWithData(successResponseData);
-                }  
+                    return _httpResponsesFactory.CreateSuccessResponseWithData(successResponseData);
+                }
                 else
                 {
                     _logger.Info($"Reservation query did not return any valid reservation");
@@ -69,16 +62,17 @@ namespace JitsiReservationManager.Controllers
                 "There is a problem with our conference reservation system, please contact our IT support.");            
         }
 
-        // GET: api/Conference/233ae591-e86b-47a2-8ebc-56989d845245
-        [HttpGet("{reservationGuid}")]
-        public JsonResult Get(string reservationGuid)
+        /// <summary>
+        /// Jicofo will call this endpoint whenever it detects conflict (it checks conflicts by room name) - it will query us to get information about conflicting meeting
+        /// </summary>
+        /// <param name="reservationId">Id assigned earlier by this system</param>
+        // GET: api/Conference/1987
+        [HttpGet("{reservationId}")]
+        public JsonResult Get(long reservationId)
         {
-            _logger.Debug($"Get request received for reservation: {reservationGuid}");
-            List<string> validationErrors;
-            if (_conferenceValidation.ValidateGetReservation(reservationGuid, out validationErrors) == false)
-                _httpResponsesFactory.CreateFailedRequestValidationResponse(validationErrors);
+            _logger.Debug($"Get request received for reservation: {reservationId}");
 
-            var loadByRoomNameResult = _reservationRepository.LoadByConferenceGuid(Guid.Parse(reservationGuid));
+            var loadByRoomNameResult = _reservationRepository.LoadByReservationId(reservationId);
             if (loadByRoomNameResult.Success)
             {
                 if (loadByRoomNameResult.Content != null)
@@ -87,24 +81,23 @@ namespace JitsiReservationManager.Controllers
                     return _httpResponsesFactory.CreateSuccessResponseWithData(successResponseData);
                 }
                 else
-                    return _httpResponsesFactory.CreateNotFoundResponseWithMessage($"Unable to find room: {reservationGuid}");
+                    return _httpResponsesFactory.CreateNotFoundResponseWithMessage($"Unable to find room: {reservationId}");
             }
             else
                 return _httpResponsesFactory.CreateInternalServerErrorWithMessage(loadByRoomNameResult.Message);
         }
 
-
-        // DELETE: api/Conference/233ae591-e86b-47a2-8ebc-56989d845245
-        [HttpDelete("{roomName}")]
-        public JsonResult Delete(string reservationGuid)
+        /// <summary>
+        /// Jicofo will call this endpoint whenever meeting has expired or all parties has disconnected (this allows us to do some cleanup)
+        /// </summary>
+        /// <param name="reservationId">Id assigned earlier by this system</param>
+        // DELETE: api/Conference/1987
+        [HttpDelete("{reservationId}")]
+        public JsonResult Delete(long reservationId)
         {
-            _logger.Debug($"Delete request received for reservation: {reservationGuid}");
+            _logger.Debug($"Delete request received for reservation: {reservationId}");
 
-            List<string> validationErrors;
-            if (_conferenceValidation.ValidateDeleteReservation(reservationGuid, out validationErrors) == false)
-                _httpResponsesFactory.CreateFailedRequestValidationResponse(validationErrors);
-
-            var deleteReservationResult = _reservationRepository.Delete(reservationGuid);
+            var deleteReservationResult = _reservationRepository.Delete(reservationId);
             if (deleteReservationResult.Success)
                 return _httpResponsesFactory.CreateSuccessResponse();
             else

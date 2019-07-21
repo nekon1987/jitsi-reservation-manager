@@ -6,7 +6,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using JitsiReservationManager.Extensions;
 using JitsiReservationManager.MessageModels.Responses;
 
@@ -14,14 +13,36 @@ namespace JitsiReservationManager.Repository
 {
     public class ReservationRepository
     {
-        private static ConcurrentDictionary<string, Reservation> InMemoryReservations = new ConcurrentDictionary<string, Reservation>();
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
+        /// This in memory repository can easily be replaced by a database one.
+        /// I would recommend Redis as it also resides in memory (by default but it can
+        /// be configured to sync to disk) guaranteeing maximum throughput of data
+        /// </summary>
+        private static ConcurrentDictionary<long, Reservation> InMemoryReservations = new ConcurrentDictionary<long, Reservation>();
+        private static long _primaryIndex = 0;
+        private readonly object _primaryIndexLock = new object();
 
         public SystemResponse<Reservation> Store(Reservation reservation)
         {
             try
             {
-                var succesfullyAddedReservation = InMemoryReservations.TryAdd(reservation.Conference.RoomName, reservation);
+                var succesfullyAddedReservation = false;
+
+                lock (_primaryIndexLock)
+                {
+                    unchecked
+                    {
+                        // Index range is:  (-9,223,372,036,854,775,808 to +9,223,372,036,854,775,807)
+                        while (InMemoryReservations.ContainsKey(_primaryIndex))
+                            _primaryIndex++;
+
+                        reservation.Id = _primaryIndex;
+                    }
+
+                    succesfullyAddedReservation = InMemoryReservations.TryAdd(reservation.Id, reservation);
+                }
 
                 if (succesfullyAddedReservation)
                     return SystemResponse<Reservation>.Successfull(reservation);
@@ -128,25 +149,47 @@ namespace JitsiReservationManager.Repository
             }     
         }
 
-        public SystemResponse<Reservation> LoadByConferenceGuid(Guid conferenceGuid)
+        public SystemResponse<Reservation> LoadByReservationId(long reservationId)
         {
             try
             {
                 var roomReservation = InMemoryReservations.Values
-                     .SingleOrDefault(reservation => reservation.Id == conferenceGuid);
+                     .SingleOrDefault(reservation => reservation.Id == reservationId);
 
                 if (roomReservation != null)
                     return SystemResponse<Reservation>.Successfull(roomReservation);
                 else
                     return SystemResponse<Reservation>
-                        .Error($"Unable to locate a reservation for room: {conferenceGuid}")
+                        .Error($"Unable to locate a reservation: {reservationId}")
                         .LogError(_logger);
             }
             catch (Exception ex)
             {
                 return SystemResponse<Reservation>
-                       .Error($"Unable to locate a reservation for room: {conferenceGuid}")
+                       .Error($"Unable to locate a reservation: {reservationId}")
                        .LogError(_logger, ex);
+            }
+        }
+
+        public SystemResponse Delete(long reservationId)
+        {
+            try
+            {
+                Reservation reservation = null;
+                var succesfullyRemovedReseravion = InMemoryReservations.TryRemove(reservationId, out reservation);
+
+                if (succesfullyRemovedReseravion)
+                    return SystemResponse.Successfull();
+                else
+                    return SystemResponse
+                        .Error($"Unable to remove reservation: {reservationId}.")
+                        .LogError(_logger);
+            }
+            catch (Exception ex)
+            {
+                return SystemResponse
+                    .Error($"Unable to store reservation: {reservationId}.")
+                    .LogError(_logger, ex);
             }
         }
 
@@ -154,10 +197,11 @@ namespace JitsiReservationManager.Repository
         {
             try
             {
-                Reservation reservation = null;
-                var succesfullyRemovedReseravion = InMemoryReservations.TryRemove(roomName, out reservation);
+                var existingReservation = InMemoryReservations.Values
+                    .SingleOrDefault(reservation => string.Equals(reservation.Conference.RoomName, roomName, StringComparison.InvariantCultureIgnoreCase));
 
-                if (succesfullyRemovedReseravion)
+                Reservation dummy = null;
+                if (existingReservation != null && InMemoryReservations.TryRemove(existingReservation.Id, out dummy))
                     return SystemResponse.Successfull();
                 else
                     return SystemResponse
@@ -168,28 +212,6 @@ namespace JitsiReservationManager.Repository
             {
                 return SystemResponse
                     .Error($"Unable to store reservation for room: {roomName}.")
-                    .LogError(_logger, ex);
-            }
-        }
-
-        public SystemResponse Delete(Guid reservationGuid)
-        {
-            try
-            {
-                var existingReservation = InMemoryReservations.Values.SingleOrDefault(reservation => reservation.Id == reservationGuid);
-
-                Reservation dummy = null;
-                if (existingReservation != null && InMemoryReservations.TryRemove(existingReservation.Conference.RoomName, out dummy))
-                    return SystemResponse.Successfull();
-                else
-                    return SystemResponse
-                        .Error($"Unable to remove reservation: {reservationGuid}.")
-                        .LogError(_logger);
-            }
-            catch (Exception ex)
-            {
-                return SystemResponse
-                    .Error($"Unable to store reservation: {reservationGuid}.")
                     .LogError(_logger, ex);
             }
         }
