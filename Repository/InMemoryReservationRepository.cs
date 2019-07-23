@@ -11,7 +11,7 @@ using JitsiReservationManager.MessageModels.Responses;
 
 namespace JitsiReservationManager.Repository
 {
-    public class ReservationRepository
+    public class InMemoryReservationRepository
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

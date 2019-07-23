@@ -27,5 +27,13 @@ namespace JitsiReservationManager.Configuration
         {
             get { return "yyyy-MM-dd'T'HH:mm:ss.fffZ"; }
         }
+
+        /// <summary>
+        /// Currently its a MySql database connection string
+        /// </summary>
+        public static string ConnectionString
+        {
+            get { return "server=52.34.162.204;user=jitsi;database=jitsiapi;port=3306;password=jitsi@123"; }
+        }
     }
 }

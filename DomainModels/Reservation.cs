@@ -24,7 +24,7 @@ namespace JitsiReservationManager.DomainModels
 
         public override string ToString()
         {
-            return $"Reservation [{Id}|{CreatedDateTime}]";
+            return $"Reservation [{Id}|{CreatedDateTime}|{Conference?.RoomName}]";
         }
     }
 }

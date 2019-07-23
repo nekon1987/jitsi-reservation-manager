@@ -55,7 +55,9 @@ namespace JitsiReservationManager.Factories
         {
             var stringBuilder = new StringBuilder("Unfortunatley some of the parameters passed in the request did not pass validation checks, bellow is a list of validation errors:");
             stringBuilder.AppendLine();
-            stringBuilder.AppendLine(string.Join(Environment.NewLine, validationErrors));
+
+            foreach (var error in validationErrors)
+                stringBuilder.AppendLine(error);            
 
             var response = new JsonResult(new { message = stringBuilder.ToString() });
             response.StatusCode = (int)HttpStatusCode.BadRequest;

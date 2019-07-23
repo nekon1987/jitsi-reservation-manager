@@ -4,6 +4,7 @@ namespace JitsiReservationManager.DomainModels
 {
     public class Conference
     {
+        public long Id { get; set; }
         public string RoomName { get; set; }
         public string RoomOwnerIdentifier { get; set; }
         public DateTime? StartTime { get; set; }
