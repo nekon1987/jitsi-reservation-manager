@@ -40,7 +40,7 @@ namespace JitsiReservationManager.Controllers
 
             List<string> validationErrors;
             if (_reservationValidation.ValidateGetReservation(roomName, out validationErrors) == false)
-                _httpResponsesFactory.CreateFailedRequestValidationResponse(validationErrors);
+                return _httpResponsesFactory.CreateFailedRequestValidationResponse(validationErrors);
 
             var loadByRoomNameResult = _reservationRepository.LoadByRoomName(roomName);
             if (loadByRoomNameResult.Success)
@@ -62,7 +62,7 @@ namespace JitsiReservationManager.Controllers
 
             List<string> validationErrors;
             if (_reservationValidation.ValidatePostReservation(request, out validationErrors) == false)
-                _httpResponsesFactory.CreateFailedRequestValidationResponse(validationErrors);
+                 return _httpResponsesFactory.CreateFailedRequestValidationResponse(validationErrors);
 
             var newReservation = _reservationsFactory.Create(
                 request.RoomName, 
@@ -87,7 +87,7 @@ namespace JitsiReservationManager.Controllers
 
             List<string> validationErrors;
             if (_reservationValidation.ValidateDeleteReservation(roomName, out validationErrors) == false)
-                _httpResponsesFactory.CreateFailedRequestValidationResponse(validationErrors);
+                return _httpResponsesFactory.CreateFailedRequestValidationResponse(validationErrors);
 
             var deleteReservationResult = _reservationRepository.Delete(roomName);
             if (deleteReservationResult.Success)

@@ -73,7 +73,7 @@ namespace JitsiReservationManager.Repository
             {
                 var reservationExistsAndIsValidForCurrentTimePeriod = false;
                 var meetingExistsButHasAlreadyStartedSoPossibleConflictDetected = false;
-
+                
                 var existingRoomReservation = InMemoryReservations.Values
                    .SingleOrDefault(reservation => reservation.Conference.RoomName
                    .Equals(roomName, StringComparison.OrdinalIgnoreCase));
