@@ -1,0 +1,379 @@
+/**
+ * Round badge.
+ */
+.badge-round {
+    background-color: $toolbarBadgeBackground;
+    border-radius: 50%;
+    box-sizing: border-box;
+    color: $toolbarBadgeColor;
+    // Do not inherit the font-family from the toolbar button, because it's an
+    // icon style.
+    font-family: $baseFontFamily;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 13px;
+    min-width: 13px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+/**
+ * TODO: when the old filmstrip has been removed, remove the "new-" prefix.
+ */
+.new-toolbox {
+    bottom: calc((#{$newToolbarSize} * 2) * -1);
+    left: 0;
+    position: absolute;
+    right: 0;
+    transition: bottom .3s ease-in;
+    width: 100%;
+
+
+    &.visible {
+        bottom: 0;
+        .toolbox-background {
+            bottom: 0px;
+        }
+    }
+
+    &.no-buttons {
+        display: none;
+    }
+
+    .toolbox-background {
+        background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+        transition: bottom .3s ease-in;
+        height: 160px;
+        width: 100%;
+        bottom: -160px;
+        pointer-events: none;
+        position: absolute;
+        z-index: $toolbarBackgroundZ;
+    }
+
+    .toolbox-content {
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px 16px;
+        position: relative;
+        width: 100%;
+        z-index: $toolbarZ;
+
+        .button-group-center,
+        .button-group-left,
+        .button-group-right {
+            display: flex;
+            width: 33%;
+        }
+
+        .button-group-center {
+            justify-content: center;
+            .toolbox-icon {
+                margin: 0px 4px;
+            }
+        }
+
+        .button-group-right {
+            justify-content: flex-end;
+        }
+
+        i {
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            font-size: inherit;
+            height: 100%;
+            line-height: inherit;
+            width: 100%;
+        }
+
+        i:hover {
+            background: $newToolbarButtonHoverColor;
+        }
+
+        i.toggled {
+            background: $newToolbarButtonToggleColor;
+        }
+
+        i.toggled:hover {
+            background: $newToolbarButtonHoverColor;
+        }
+
+        .icon-hangup {
+            background-color: #e12d2d;
+            color: #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+
+            &:hover {
+                background-color: #e54b4b;
+            }
+        }
+        i.disabled, .disabled i {
+            cursor: initial !important;
+            color: #fff !important;
+            background-color: #a4b8d1 !important;
+        }
+
+        .icon-mic-disabled, .icon-microphone, .icon-camera-disabled, .icon-camera {
+            background-color: #fff;
+            color: #5e6d7a;
+            border-radius: 50%;
+            border: 1px solid #d1dbe8;
+            width: 38px;
+            height: 38px;
+
+            &:hover {
+                background-color: #daebfa;
+                border: 1px solid #daebfa;
+            }
+
+            &.toggled {
+                background: #2a3a4b;
+                color: #fff;
+                border: 1px solid #5e6d7a;
+
+                &:hover {
+                    background-color: #5e6d7a;
+                }
+            }
+
+            &.disabled, .disabled & {
+                cursor: initial;
+                color: #fff;
+                background-color: #a4b8d1;
+            }
+        }
+
+        .overflow-menu {
+            font-size: 1.2em;
+            list-style-type: none;
+            background-color: $overflowMenuBG;
+            /**
+             * Undo atlaskit padding by reducing margins.
+             */
+            margin: -16px -24px;
+            padding: 4px 0;
+
+            .overflow-menu-item {
+                align-items: center;
+                color: $overflowMenuItemColor;
+                cursor: pointer;
+                display: flex;
+                font-size: 14px;
+                height: 22px;
+                padding: 5px 12px;
+
+                div {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                }
+
+                &:hover {
+                    background-color: $overflowMenuItemHoverBG;
+                    color: $overflowMenuItemHoverColor;
+                }
+
+                &.unclickable {
+                    cursor: default;
+                }
+                &.unclickable:hover {
+                    background: inherit;
+                }
+                &.disabled {
+                    cursor: initial;
+                    color: #3b475c;
+                }
+
+                i.toggled {
+                    background: inherit;
+                }
+
+                i.toggled:hover {
+                    background: inherit;
+                }
+            }
+
+            .beta-tag {
+                background: $overflowMenuItemColor;
+                border-radius: 2px;
+                color: $overflowMenuBG;
+                font-size: 11px;
+                font-weight: bold;
+                margin-left: 8px;
+                padding: 0 6px;
+            }
+
+            .overflow-menu-item-icon {
+                margin-right: 10px;
+
+                i {
+                    display: inline;
+                    font-size: 24px;
+                }
+
+                i:hover {
+                    background-color: initial;
+                }
+
+                img {
+                    max-width: 24px;
+                    max-height: 24px;
+                }
+            }
+
+            .profile-text {
+                max-width: 150px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+
+        .toolbox-button {
+            color: $toolbarButtonColor;
+            cursor: pointer;
+            display: inline-block;
+            line-height: $newToolbarSize;
+            margin: 0 8px;
+            text-align: center;
+        }
+
+        .toolbar-button-with-badge {
+            position: relative;
+
+            .badge-round {
+                bottom: -5px;
+                font-size: 12px;
+                line-height: 20px;
+                min-width: 20px;
+                pointer-events: none;
+                position: absolute;
+                right: -5px;
+            }
+        }
+
+        .toolbox-button-wth-dialog {
+            display: inline-block;
+        }
+
+        .toolbox-icon {
+            height: $newToolbarSize;
+            font-size: 24px;
+            width: $newToolbarSize;
+        }
+    }
+}
+
+.always-on-top-toolbox,
+.filmstrip-toolbox {
+    background-color: $newToolbarBackgroundColor;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    z-index: $toolbarZ;
+
+    i {
+        cursor: pointer;
+        display: block;
+    }
+
+    i:hover {
+        background-color: $AOTToolbarButtonHoverColor;
+    }
+
+    i.toggled {
+        background: $AOTToolbarButtonToggleColor;
+    }
+
+    i.toggled:hover:not(.disabled) {
+        background-color: $AOTToolbarButtonHoverColor;
+    }
+
+    .icon-hangup {
+        color: $hangupColor;
+    }
+
+    .toolbox-button {
+        color: $toolbarButtonColor;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    border-radius: 3px;
+}
+
+.always-on-top-toolbox {
+    flex-direction: row;
+    left: 50%;
+    position: absolute;
+    top: 10px;
+    transform: translateX(-50%);
+    z-index: $toolbarZ;
+
+    i {
+        font-size: $newToolbarFontSize;
+        height: $newToolbarSize;
+        line-height: $newToolbarSize;
+        width: $newToolbarSize;
+    }
+
+    .icon-hangup {
+        font-size: $newToolbarHangupFontSize;
+    }
+
+    .disabled {
+        cursor: initial;
+    }
+
+    .toolbox-button:first-child i {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+
+    .toolbox-button:last-child i {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+}
+
+.filmstrip-toolbox {
+    i {
+        font-size: 1.9em;
+        height: 37px;
+        line-height: 37px;
+        width: 37px;
+    }
+
+    .toolbox-button:first-child i {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .toolbox-button:last-child i {
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+}
+
+/**
+ * START of fade in animation for main toolbar
+ */
+.fadeIn {
+    opacity: 1;
+
+    @include transition(all .3s ease-in);
+}
+
+.fadeOut {
+    opacity: 0;
+
+    @include transition(all .3s ease-out);
+}

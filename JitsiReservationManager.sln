@@ -3,7 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitsiReservationManager", "JitsiReservationManager.csproj", "{47BE477A-DD80-44C6-910B-0FAB52D38290}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitsiReservationManager", "jitsi-reservation-system\JitsiReservationManager.csproj", "{676E7889-AC5D-43F2-9DDE-E0E61E527010}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "jitsi-meet", "jitsi-meet\", "{C2AB86AE-4267-4B79-B2FE-210A8FF6774C}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_3723"
+		Debug.AspNetCompiler.PhysicalPath = "jitsi-meet\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_3723\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_3723"
+		Release.AspNetCompiler.PhysicalPath = "jitsi-meet\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_3723\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "3723"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +31,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{47BE477A-DD80-44C6-910B-0FAB52D38290}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47BE477A-DD80-44C6-910B-0FAB52D38290}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47BE477A-DD80-44C6-910B-0FAB52D38290}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47BE477A-DD80-44C6-910B-0FAB52D38290}.Release|Any CPU.Build.0 = Release|Any CPU
+		{676E7889-AC5D-43F2-9DDE-E0E61E527010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{676E7889-AC5D-43F2-9DDE-E0E61E527010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{676E7889-AC5D-43F2-9DDE-E0E61E527010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{676E7889-AC5D-43F2-9DDE-E0E61E527010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2AB86AE-4267-4B79-B2FE-210A8FF6774C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2AB86AE-4267-4B79-B2FE-210A8FF6774C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2AB86AE-4267-4B79-B2FE-210A8FF6774C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2AB86AE-4267-4B79-B2FE-210A8FF6774C}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
