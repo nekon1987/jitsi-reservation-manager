@@ -52,7 +52,7 @@
     "jquery-i18next": "1.2.1",
     "js-md5": "0.6.1",
     "js-utils": "github:jitsi/js-utils#192b1c996e8c05530eb1f19e82a31069c3021e31",
-    "jsrsasign": "8.0.12",
+    "jsrsasign": "10.5.25",
     "jwt-decode": "2.2.0",
     "lib-jitsi-meet": "github:jitsi/lib-jitsi-meet#c73bc490ed88c5851ea302a599ca9cc1330eed08",
     "libflacjs": "github:mmig/libflac.js#93d37e7f811f01cf7d8b6a603e38bd3c3810907d",
